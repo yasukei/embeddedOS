@@ -7,9 +7,6 @@ SRC_OBJS = \
 TEST_OBJS = \
 	lib_test.o
 
-MOCK_OBJS = \
-	mock_serial.o
-
 INCLUDE_DIRS = \
    $(SRC_DIR)
 

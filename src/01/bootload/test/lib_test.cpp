@@ -35,15 +35,15 @@ class lib_test : public ::testing::Test
 
 TEST_F(lib_test, test1)
 {
-	//EXPECT_CALL(mockSerial, serial_send_byte(_, 'a'));
+	EXPECT_CALL(mockSerial, serial_send_byte(_, 'a'));
 
 	putc('a');
 }
 
-//TEST_F(lib_test, test2)
-//{
-//	EXPECT_CALL(mockSerial, serial_send_byte(_, 'b'));
-//
-//	putc('b');
-//}
+TEST_F(lib_test, test2)
+{
+	EXPECT_CALL(mockSerial, serial_send_byte(_, 'b'));
+
+	putc('b');
+}
 
