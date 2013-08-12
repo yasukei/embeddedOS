@@ -30,7 +30,6 @@ class lib_test : public ::testing::Test
 	virtual void TearDown()
 	{
 		MockSerial_set((MockSerial*)NULL);
-		;
 	}
 };
 
@@ -48,23 +47,32 @@ TEST_F(lib_test, test2)
 	putc('b');
 }
 
-class memsetTest : public ::testing::TestWithParam< ::std::tr1::tuple<void*, void*, int, long> >
+class memsetTest : public ::testing::TestWithParam< ::std::tr1::tuple<void*, int, long> >
 {
 };
 
 TEST_P(memsetTest, test1)
 {
-	void* ret	= ::std::tr1::get<0>(GetParam());
-	void* buf	= ::std::tr1::get<1>(GetParam());
-	int c		= ::std::tr1::get<2>(GetParam());
-	long len	= ::std::tr1::get<3>(GetParam());
+	void* buf	= ::std::tr1::get<0>(GetParam());
+	int c		= ::std::tr1::get<1>(GetParam());
+	long len	= ::std::tr1::get<2>(GetParam());
+	void* ret;
 
-	EXPECT_TRUE(ret == memset(buf, c, len));
+	ret = memset(buf, c, len);
+
+	// TODO: under construction
+	EXPECT_EQ(buf, ret);
+	//for(int i = 0; i < len; i++)
+	//{
+	//	EXP
+	//}
 }
 
-::std::tr1::tuple<void*, void*, int, long> memsetTest_testData[] = {
-						// ret, buf, c, len
-	std::tr1::make_tuple((void*)NULL, (void*)NULL, 0, 0),
+int gArrayForMemsetTest[32];
+
+::std::tr1::tuple<void*, int, long> memsetTest_testData[] = {
+						//	buf,			c,	len
+	std::tr1::make_tuple(	(void*)NULL,	0,	0),
 };
 
 INSTANTIATE_TEST_CASE_P(

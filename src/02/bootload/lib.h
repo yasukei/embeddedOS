@@ -4,6 +4,11 @@
 int putc(unsigned char c);		/* transmit 1 charactor */
 int puts(unsigned char *str);	/* transmit 1 line */
 
+int putxval(
+		unsigned long value,
+		int column
+		);
+
 void* memset(
 		void* buf,
 		int c,
