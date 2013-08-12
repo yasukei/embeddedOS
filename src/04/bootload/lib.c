@@ -2,24 +2,60 @@
 #include "serial.h"
 #include "lib.h"
 
-int putc(unsigned char c)
+int putc(
+		unsigned char c
+		)
 {
-  if (c == '\n')
-  {
-    serial_send_byte(SERIAL_DEFAULT_DEVICE, '\r');
-  }
+	if (c == '\n')
+	{
+	  serial_send_byte(SERIAL_DEFAULT_DEVICE, '\r');
+	}
 
-  return serial_send_byte(SERIAL_DEFAULT_DEVICE, c);
+	return serial_send_byte(SERIAL_DEFAULT_DEVICE, c);
 }
 
-int puts(unsigned char *str)
+unsigned char getc(
+		void
+		)
 {
-  while (*str)
-  {
-    putc(*(str++));
-  }
+	unsigned char c = serial_recv_byte(SERIAL_DEFAULT_DEVICE);
+	c = (c == '\r') ? '\n' : c;
+	putc(c); /* echo back */
 
-  return 0;
+	return c;
+}
+
+int puts(
+		unsigned char *str
+		)
+{
+	while (*str)
+	{
+	  putc(*(str++));
+	}
+
+	return 0;
+}
+
+int gets(
+		unsigned char *buf
+		)
+{
+	int i = 0;
+	unsigned char c;
+
+	do
+	{
+		c = getc();
+		if(c == '\n')
+		{
+			c = '\0';
+		}
+		buf[i++] = c;
+	}
+	while(c);
+
+	return i - 1;
 }
 
 int putxval(
