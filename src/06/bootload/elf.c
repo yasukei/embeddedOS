@@ -81,19 +81,20 @@ static int elf_load_program(
 			continue;
 		}
 
-		putxval(phdr->offset,			6); puts(" ");
-		putxval(phdr->virtual_addr,		8); puts(" ");
-		putxval(phdr->physical_addr,	8); puts(" ");
-		putxval(phdr->file_size,		5); puts(" ");
-		putxval(phdr->memory_size,		5); puts(" ");
-		putxval(phdr->flags,			2); puts(" ");
-		putxval(phdr->align,			2); puts("\n");
+		memcpy(
+				(char*)phdr->physical_addr,
+				(char*)header + phdr->offset,
+				phdr->file_size);
+		memset(
+				(char*)phdr->physical_addr + phdr->offset,
+				0,
+				phdr->memory_size - phdr->file_size);
 	}
 
 	return 0;
 }
 
-int elf_load(
+char* elf_load(
 		char* buf
 		)
 {
@@ -101,14 +102,14 @@ int elf_load(
 
 	if(elf_check(header) < 0)
 	{
-		return -1;
+		return NULL;
 	}
 
 	if(elf_load_program(header) < 0)
 	{
-		return -1;
+		return NULL;
 	}
 
-	return 0;
+	return (char*)header->entry_point;
 }
 
