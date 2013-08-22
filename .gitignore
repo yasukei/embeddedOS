@@ -21,3 +21,8 @@ binutils-2.19.1/
 gcc-3.4.6/
 osbook_03/
 archive/
+GPATH
+GRTAGS
+GSYMS
+GTAGS
+tags
