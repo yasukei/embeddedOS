@@ -3,6 +3,7 @@
 #include "intr.h"
 #include "interrupt.h"
 #include "syscall.h"
+#include "memory.h"
 #include "lib.h"
 
 #define THREAD_NUM 6
@@ -245,6 +246,23 @@ static int thread_chpri(
 	return old;
 }
 
+static void* thread_kmalloc(
+	int size
+	)
+{
+	putcurrent();
+	return kzmem_alloc(size);
+}
+
+static int thread_kmfree(
+	char* p
+	)
+{
+	kzmem_free(p);
+	putcurrent();
+	return 0;
+}
+
 static int setintr(
 	softvec_type_t type,
 	kz_handler_t handler
@@ -292,6 +310,12 @@ static void call_functions(
 			break;
 		case KZ_SYSCALL_TYPE_CHPRI: /* kz_chpri() */
 			p->un.chpri.ret = thread_chpri(p->un.chpri.priority);
+			break;
+		case KZ_SYSCALL_TYPE_KMALLOC: /* kz_kmalloc() */
+			p->un.kmalloc.ret = thread_kmalloc(p->un.kmalloc.size);
+			break;
+		case KZ_SYSCALL_TYPE_KMFREE: /* kz_kmfree() */
+			p->un.kmfree.ret = thread_kmfree(p->un.kmfree.p);
 			break;
 		default:
 			break;
@@ -372,6 +396,8 @@ void kz_start(
 	char* argv[]
 	)
 {
+	kzmem_init();
+
 	current = NULL;
 
 	memset(readyque, 0, sizeof(readyque));
