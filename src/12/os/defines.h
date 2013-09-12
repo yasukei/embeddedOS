@@ -1,9 +1,7 @@
 #ifndef _DEFINES_H_INCLUDED_
 #define _DEFINES_H_INCLUDED_
 
-#ifndef NULL
 #define NULL ((void *)0)
-#endif
 
 #define SERIAL_DEFAULT_DEVICE 1
 
@@ -17,8 +15,8 @@ typedef void (*kz_handler_t)(void);
 
 typedef enum
 {
-	MSGBOX_ID_MSGBOX1 = 0,
-	MSGBOX_ID_MSGBOX2,
+	MSGBOX_ID_CONSINPUT = 0,
+	MSGBOX_ID_CONSOUTPUT,
 	MSGBOX_ID_NUM,
 } kz_msgbox_id_t;
 
